@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 
+import 'package:fd_template_creator/src/extensions.dart';
 import 'package:fd_template_creator/src/logger.dart';
 import 'package:fd_template_creator/src/template_model.dart';
 import 'package:yaml/yaml.dart';
@@ -18,12 +19,13 @@ class CommandRunner {
       _createFlutterProject(template, workingDirectoryPath);
       _retrieveTemplate(template, workingDirectoryPath);
 
-      for (final e in template.files) {
-        _copyPaste(
-          source: '$workingDirectoryPath/temp/$e',
-          target: '$workingDirectoryPath/$e',
-        );
-      }
+      // Copy cloned files.
+      // for (final e in template.files) {
+      //   _copyPaste(
+      //     source: '$workingDirectoryPath/temp/$e',
+      //     target: '$workingDirectoryPath/$e',
+      //   );
+      // }
     } on io.FileSystemException catch (e) {
       io.stderr.writeln(e.toString());
     } finally {
@@ -68,7 +70,7 @@ class CommandRunner {
 
   void _deleteTempFiles(String workDir) {
     Logger.logInfo('Deleting temp files used for generation...');
-    io.Process.runSync('rm', ['-rf', '$workDir/temp'.formatToFilePath()]);
+    io.Process.runSync('rm', ['-rf', '$workDir/temp']);
   }
 
   /// Copy all the content of [source] and paste it in [target].
@@ -81,14 +83,5 @@ class CommandRunner {
       'cp',
       ['-r', source.formatToFilePath(), target.formatToFilePath()],
     );
-  }
-}
-
-extension on String {
-  String formatToFilePath() {
-    if (io.Platform.isWindows) {
-      return replaceAll('/', '\\');
-    }
-    return this;
   }
 }
