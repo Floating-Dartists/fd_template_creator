@@ -1,0 +1,16 @@
+name: my_app
+# description: A new Flutter project.
+# organization: com.example
+template:
+  # path: path/to/template
+  git:
+    url: https://github.com/Floating-Dartists/fd_template.git
+    # ref: main
+  files:
+    - .github/
+    - lib/
+    - assets/
+    - test/
+    - analysis_options.yaml
+    - dart_test.yaml
+    - pubspec.yaml
