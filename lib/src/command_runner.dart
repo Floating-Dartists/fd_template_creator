@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 
+import 'package:fd_template_creator/src/extensions.dart';
 import 'package:fd_template_creator/src/logger.dart';
 import 'package:fd_template_creator/src/template_model.dart';
 import 'package:yaml/yaml.dart';
@@ -68,14 +69,8 @@ class CommandRunner {
   }
 
   void _deleteTempFiles(String workDir) {
-    if (io.Platform.isWindows) {
-      Logger.logWarning(
-        'You are on Windows. Please delete the temp folder manually.',
-      );
-    } else {
-      Logger.logInfo('Deleting temp files used for generation...');
-      io.Process.runSync('rm', ['-rf', '$workDir/temp']);
-    }
+    Logger.logInfo('Deleting temp files used for generation...');
+    io.Process.runSync('rm', ['-rf', '$workDir/temp']);
   }
 
   /// Copy all the content of [source] and paste it in [target].
@@ -88,14 +83,5 @@ class CommandRunner {
       'cp',
       ['-r', source.formatToFilePath(), target.formatToFilePath()],
     );
-  }
-}
-
-extension on String {
-  String formatToFilePath() {
-    if (io.Platform.isWindows) {
-      return replaceAll('/', '\\');
-    }
-    return this;
   }
 }
