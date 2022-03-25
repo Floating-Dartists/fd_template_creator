@@ -68,10 +68,8 @@ class CommandRunner {
   }
 
   void _deleteTempFiles(String workDir) {
-    Logger.logInfo(
-      'Deleting temp files in ${'$workDir/temp'.formatToFilePath()}',
-    );
-    io.Process.runSync('rm', ['-rf', '$workDir/temp'.formatToFilePath()]);
+    Logger.logInfo('Deleting temp files used for generation...');
+    io.Process.runSync('rm', ['-rf', '$workDir/temp']);
   }
 
   /// Copy all the content of [source] and paste it in [target].
