@@ -68,8 +68,14 @@ class CommandRunner {
   }
 
   void _deleteTempFiles(String workDir) {
-    Logger.logInfo('Deleting temp files used for generation...');
-    io.Process.runSync('rm', ['-rf', '$workDir/temp']);
+    if (io.Platform.isWindows) {
+      Logger.logWarning(
+        'You are on Windows. Please delete the temp folder manually.',
+      );
+    } else {
+      Logger.logInfo('Deleting temp files used for generation...');
+      io.Process.runSync('rm', ['-rf', '$workDir/temp']);
+    }
   }
 
   /// Copy all the content of [source] and paste it in [target].
