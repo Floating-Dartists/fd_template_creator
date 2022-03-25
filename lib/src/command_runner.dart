@@ -18,12 +18,13 @@ class CommandRunner {
       _createFlutterProject(template, workingDirectoryPath);
       _retrieveTemplate(template, workingDirectoryPath);
 
-      for (final e in template.files) {
-        _copyPaste(
-          source: '$workingDirectoryPath/temp/$e',
-          target: '$workingDirectoryPath/$e',
-        );
-      }
+      // Copy cloned files.
+      // for (final e in template.files) {
+      //   _copyPaste(
+      //     source: '$workingDirectoryPath/temp/$e',
+      //     target: '$workingDirectoryPath/$e',
+      //   );
+      // }
     } on io.FileSystemException catch (e) {
       io.stderr.writeln(e.toString());
     } finally {
@@ -67,7 +68,9 @@ class CommandRunner {
   }
 
   void _deleteTempFiles(String workDir) {
-    Logger.logInfo('Deleting temp files used for generation...');
+    Logger.logInfo(
+      'Deleting temp files in ${'$workDir/temp'.formatToFilePath()}',
+    );
     io.Process.runSync('rm', ['-rf', '$workDir/temp'.formatToFilePath()]);
   }
 
