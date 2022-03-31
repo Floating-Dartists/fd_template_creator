@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 
+import 'package:fd_template_creator/src/command_wrapper.dart';
 import 'package:fd_template_creator/src/extensions.dart';
 import 'package:fd_template_creator/src/logger.dart';
 import 'package:fd_template_creator/src/template_model.dart';
@@ -21,7 +22,7 @@ class CommandRunner {
 
       // Copy cloned files.
       for (final e in template.files) {
-        _copyPaste(
+        await _copyPaste(
           source: '$workingDirectoryPath/temp/$e',
           target: '$workingDirectoryPath/$e',
         );
@@ -31,22 +32,22 @@ class CommandRunner {
       for (final e in template.files) {
         final path = '$workingDirectoryPath/$e';
         if (path.isDirectory()) {
-          _changeAllInDirectory(
+          await _changeAllInDirectory(
             directoryPath: path,
             oldPackageName: template.templateName,
             newPackageName: template.appName,
           );
         } else if (path.isFile()) {
-          _changeAllInFile(
+          await _changeAllInFile(
             path: path,
             oldValue: template.templateName,
             newValue: template.appName,
           );
         }
+        _deleteTempFiles(workingDirectoryPath);
       }
     } on io.FileSystemException catch (e) {
       io.stderr.writeln(e.toString());
-    } finally {
       _deleteTempFiles(workingDirectoryPath);
     }
 
@@ -74,9 +75,7 @@ class CommandRunner {
 
   void _retrieveTemplate(TemplateModel template, String workDir) {
     final templatePath = template.relativePath ?? template.gitRepository?.url;
-    Logger.logInfo(
-      'Retrieving your template from $templatePath...',
-    );
+    Logger.logInfo('Retrieving your template from $templatePath...');
 
     io.Process.runSync(
       'git',
@@ -88,24 +87,19 @@ class CommandRunner {
 
   void _deleteTempFiles(String workDir) {
     Logger.logInfo('Deleting temp files used for generation...');
-    io.Process.runSync(
-      'rm',
-      ['-rf', 'temp'],
-      workingDirectory: workDir,
-      runInShell: true,
-    );
+    CommandWrapper.deleteSync('$workDir/temp');
   }
 
   /// Copy all the content of [source] and paste it in [target].
-  void _copyPaste({
+  Future<void> _copyPaste({
     required String source,
     required String target,
-  }) {
-    io.Process.runSync('rm', ['-rf', target], runInShell: true);
-    io.Process.runSync(
-      'cp',
-      ['-r', source.formatToFilePath(), target.formatToFilePath()],
-      runInShell: true,
+  }) async {
+    CommandWrapper.deleteSync(target);
+    Logger.logInfo('Copying $source to $target...');
+    await CommandWrapper.copy(
+      source: source,
+      target: target,
     );
   }
 
@@ -117,6 +111,7 @@ class CommandRunner {
     required String newPackageName,
   }) async {
     final directory = io.Directory(directoryPath);
+    Logger.logInfo(directory.path);
     final dirName = directory.path.split('/').last;
     if (directory.existsSync()) {
       final files = directory.listSync();
