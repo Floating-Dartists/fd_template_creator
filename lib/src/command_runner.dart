@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 
+import 'package:fd_template_creator/src/command_wrapper.dart';
 import 'package:fd_template_creator/src/extensions.dart';
 import 'package:fd_template_creator/src/logger.dart';
 import 'package:fd_template_creator/src/template_model.dart';
@@ -21,7 +22,7 @@ class CommandRunner {
 
       // Copy cloned files.
       for (final e in template.files) {
-        _copyPaste(
+        await _copyPaste(
           source: '$workingDirectoryPath/temp/$e',
           target: '$workingDirectoryPath/$e',
         );
@@ -31,13 +32,16 @@ class CommandRunner {
       for (final e in template.files) {
         final path = '$workingDirectoryPath/$e';
         if (path.isDirectory()) {
-          _changeAllInDirectory(
+          await _changeAllInDirectory(
             directoryPath: path,
             oldPackageName: template.templateName,
             newPackageName: template.appName,
           );
         } else if (path.isFile()) {
-          _changeAllInFile(
+          Logger.logInfo(
+            "$path updated with new package name (${template.appName})",
+          );
+          await _changeAllInFile(
             path: path,
             oldValue: template.templateName,
             newValue: template.appName,
@@ -74,9 +78,7 @@ class CommandRunner {
 
   void _retrieveTemplate(TemplateModel template, String workDir) {
     final templatePath = template.relativePath ?? template.gitRepository?.url;
-    Logger.logInfo(
-      'Retrieving your template from $templatePath...',
-    );
+    Logger.logInfo('Retrieving your template from $templatePath...');
 
     io.Process.runSync(
       'git',
@@ -88,18 +90,19 @@ class CommandRunner {
 
   void _deleteTempFiles(String workDir) {
     Logger.logInfo('Deleting temp files used for generation...');
-    io.Process.runSync('rm', ['-rf', '$workDir/temp']);
+    CommandWrapper.deleteSync('$workDir/temp');
   }
 
   /// Copy all the content of [source] and paste it in [target].
-  void _copyPaste({
+  Future<void> _copyPaste({
     required String source,
     required String target,
-  }) {
-    io.Process.runSync('rm', ['-rf', target.formatToFilePath()]);
-    io.Process.runSync(
-      'cp',
-      ['-r', source.formatToFilePath(), target.formatToFilePath()],
+  }) async {
+    CommandWrapper.deleteSync(target);
+    Logger.logInfo('Copying $source to $target...');
+    await CommandWrapper.copy(
+      source: source,
+      target: target,
     );
   }
 
@@ -111,29 +114,23 @@ class CommandRunner {
     required String newPackageName,
   }) async {
     final directory = io.Directory(directoryPath);
-    final dirName = directory.path.split('/').last;
     if (directory.existsSync()) {
       final files = directory.listSync();
-
-      final futures = <Future>[];
       for (final file in files) {
         if (file is io.File) {
-          futures.add(
-            _changeAllInFile(
-              path: file.path,
-              oldValue: oldPackageName,
-              newValue: newPackageName,
-            ),
+          await _changeAllInFile(
+            path: file.path,
+            oldValue: oldPackageName,
+            newValue: newPackageName,
           );
         }
       }
-      await Future.wait(futures);
       Logger.logInfo(
-        "All files in $dirName updated with new package name ($newPackageName)",
+        "All files in $directoryPath updated with new package name ($newPackageName)",
       );
     } else {
       Logger.logWarning(
-        "Missing directory $dirName in your template, it will be ignored",
+        "Missing directory $directoryPath in your template, it will be ignored",
       );
     }
   }
