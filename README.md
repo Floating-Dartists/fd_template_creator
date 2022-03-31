@@ -5,16 +5,14 @@ in `lib/`, and example unit test in `test/`.
 
 ## Usage
 
+Create a file `fd_template_creator.yaml` in the root of your project.
+
 ```yaml
 name: my_app
-# description: A new Flutter project.
-# organization: com.example
 template:
-  name: fd_template_creator
-  # path: path/to/template
+  name: fd_template
   git:
     url: https://github.com/Floating-Dartists/fd_template.git
-    # ref: main
   files:
     - .github/
     - lib/

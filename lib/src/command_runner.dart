@@ -38,16 +38,19 @@ class CommandRunner {
             newPackageName: template.appName,
           );
         } else if (path.isFile()) {
+          Logger.logInfo(
+            "$path updated with new package name (${template.appName})",
+          );
           await _changeAllInFile(
             path: path,
             oldValue: template.templateName,
             newValue: template.appName,
           );
         }
-        _deleteTempFiles(workingDirectoryPath);
       }
     } on io.FileSystemException catch (e) {
       io.stderr.writeln(e.toString());
+    } finally {
       _deleteTempFiles(workingDirectoryPath);
     }
 
@@ -111,8 +114,6 @@ class CommandRunner {
     required String newPackageName,
   }) async {
     final directory = io.Directory(directoryPath);
-    Logger.logInfo(directory.path);
-    final dirName = directory.path.split('/').last;
     if (directory.existsSync()) {
       final files = directory.listSync();
       for (final file in files) {
@@ -125,11 +126,11 @@ class CommandRunner {
         }
       }
       Logger.logInfo(
-        "All files in $dirName updated with new package name ($newPackageName)",
+        "All files in $directoryPath updated with new package name ($newPackageName)",
       );
     } else {
       Logger.logWarning(
-        "Missing directory $dirName in your template, it will be ignored",
+        "Missing directory $directoryPath in your template, it will be ignored",
       );
     }
   }
