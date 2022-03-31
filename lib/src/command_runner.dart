@@ -1,6 +1,5 @@
 import 'dart:io' as io;
 
-import 'package:fd_template_creator/src/command_wrapper.dart';
 import 'package:fd_template_creator/src/extensions.dart';
 import 'package:fd_template_creator/src/logger.dart';
 import 'package:fd_template_creator/src/template_model.dart';
@@ -21,16 +20,12 @@ class CommandRunner {
       _retrieveTemplate(template, workingDirectoryPath);
 
       // Copy cloned files.
-      final futures = <Future>[];
       for (final e in template.files) {
-        futures.add(
-          _copyPaste(
-            source: '$workingDirectoryPath/temp/$e',
-            target: '$workingDirectoryPath/$e',
-          ),
+        _copyPaste(
+          source: '$workingDirectoryPath/temp/$e',
+          target: '$workingDirectoryPath/$e',
         );
       }
-      await Future.wait(futures);
 
       // Update files.
       for (final e in template.files) {
@@ -52,7 +47,7 @@ class CommandRunner {
     } on io.FileSystemException catch (e) {
       io.stderr.writeln(e.toString());
     } finally {
-      await _deleteTempFiles(workingDirectoryPath);
+      _deleteTempFiles(workingDirectoryPath);
     }
 
     Logger.logInfo('You are good to go ! :)', lineBreak: true);
@@ -91,23 +86,26 @@ class CommandRunner {
     );
   }
 
-  Future<void> _deleteTempFiles(String workDir) async {
+  void _deleteTempFiles(String workDir) {
     Logger.logInfo('Deleting temp files used for generation...');
-    await CommandWrapper.delete('$workDir/temp');
-    // io.Process.runSync('rm', ['-rf', '$workDir/temp']);
+    io.Process.runSync(
+      'rm',
+      ['-rf', 'temp'],
+      workingDirectory: workDir,
+      runInShell: true,
+    );
   }
 
   /// Copy all the content of [source] and paste it in [target].
-  Future<void> _copyPaste({
+  void _copyPaste({
     required String source,
     required String target,
-  }) async {
-    await CommandWrapper.delete(target);
-
-    // io.Process.runSync('rm', ['-rf', target.formatToFilePath()]);
+  }) {
+    io.Process.runSync('rm', ['-rf', target], runInShell: true);
     io.Process.runSync(
       'cp',
       ['-r', source.formatToFilePath(), target.formatToFilePath()],
+      runInShell: true,
     );
   }
 
@@ -122,20 +120,15 @@ class CommandRunner {
     final dirName = directory.path.split('/').last;
     if (directory.existsSync()) {
       final files = directory.listSync();
-
-      final futures = <Future>[];
       for (final file in files) {
         if (file is io.File) {
-          futures.add(
-            _changeAllInFile(
-              path: file.path,
-              oldValue: oldPackageName,
-              newValue: newPackageName,
-            ),
+          await _changeAllInFile(
+            path: file.path,
+            oldValue: oldPackageName,
+            newValue: newPackageName,
           );
         }
       }
-      await Future.wait(futures);
       Logger.logInfo(
         "All files in $dirName updated with new package name ($newPackageName)",
       );
