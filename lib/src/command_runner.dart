@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 
+import 'package:fd_template_creator/src/command_wrapper.dart';
 import 'package:fd_template_creator/src/extensions.dart';
 import 'package:fd_template_creator/src/logger.dart';
 import 'package:fd_template_creator/src/template_model.dart';
@@ -20,12 +21,16 @@ class CommandRunner {
       _retrieveTemplate(template, workingDirectoryPath);
 
       // Copy cloned files.
+      final futures = <Future>[];
       for (final e in template.files) {
-        _copyPaste(
-          source: '$workingDirectoryPath/temp/$e',
-          target: '$workingDirectoryPath/$e',
+        futures.add(
+          _copyPaste(
+            source: '$workingDirectoryPath/temp/$e',
+            target: '$workingDirectoryPath/$e',
+          ),
         );
       }
+      await Future.wait(futures);
 
       // Update files.
       for (final e in template.files) {
@@ -47,7 +52,7 @@ class CommandRunner {
     } on io.FileSystemException catch (e) {
       io.stderr.writeln(e.toString());
     } finally {
-      _deleteTempFiles(workingDirectoryPath);
+      await _deleteTempFiles(workingDirectoryPath);
     }
 
     Logger.logInfo('You are good to go ! :)', lineBreak: true);
@@ -86,17 +91,20 @@ class CommandRunner {
     );
   }
 
-  void _deleteTempFiles(String workDir) {
+  Future<void> _deleteTempFiles(String workDir) async {
     Logger.logInfo('Deleting temp files used for generation...');
-    io.Process.runSync('rm', ['-rf', '$workDir/temp']);
+    await CommandWrapper.delete('$workDir/temp');
+    // io.Process.runSync('rm', ['-rf', '$workDir/temp']);
   }
 
   /// Copy all the content of [source] and paste it in [target].
-  void _copyPaste({
+  Future<void> _copyPaste({
     required String source,
     required String target,
-  }) {
-    io.Process.runSync('rm', ['-rf', target.formatToFilePath()]);
+  }) async {
+    await CommandWrapper.delete(target);
+
+    // io.Process.runSync('rm', ['-rf', target.formatToFilePath()]);
     io.Process.runSync(
       'cp',
       ['-r', source.formatToFilePath(), target.formatToFilePath()],
