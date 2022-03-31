@@ -4,17 +4,19 @@ const _kDefaultDesc = 'A new Flutter project.';
 const _kDefaultOrg = 'com.example';
 
 class TemplateModel {
-  final String name;
+  final String appName;
   final String description;
   final String organization;
+  final String templateName;
   final String? relativePath;
   final GitRepository? gitRepository;
   final List<String> files;
 
   TemplateModel({
-    required this.name,
+    required this.appName,
     required this.description,
     required this.organization,
+    required this.templateName,
     this.relativePath,
     this.gitRepository,
     required this.files,
@@ -30,9 +32,10 @@ class TemplateModel {
   factory TemplateModel.fromYamlMap(YamlMap yamlMap) {
     final templateMap = yamlMap['template'] as YamlMap;
     return TemplateModel(
-      name: yamlMap['name'] as String,
+      appName: yamlMap['name'] as String,
       description: yamlMap['description'] as String? ?? _kDefaultDesc,
       organization: yamlMap['organization'] as String? ?? _kDefaultOrg,
+      templateName: templateMap['name'] as String,
       relativePath: templateMap['path'] as String?,
       gitRepository: templateMap['git'] != null
           ? GitRepository.fromYamlMap(templateMap['git'] as YamlMap)

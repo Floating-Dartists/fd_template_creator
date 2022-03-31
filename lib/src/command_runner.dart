@@ -20,12 +20,30 @@ class CommandRunner {
       _retrieveTemplate(template, workingDirectoryPath);
 
       // Copy cloned files.
-      // for (final e in template.files) {
-      //   _copyPaste(
-      //     source: '$workingDirectoryPath/temp/$e',
-      //     target: '$workingDirectoryPath/$e',
-      //   );
-      // }
+      for (final e in template.files) {
+        _copyPaste(
+          source: '$workingDirectoryPath/temp/$e',
+          target: '$workingDirectoryPath/$e',
+        );
+      }
+
+      // Update files.
+      for (final e in template.files) {
+        final path = '$workingDirectoryPath/$e';
+        if (path.isDirectory()) {
+          _changeAllInDirectory(
+            directoryPath: path,
+            oldPackageName: template.templateName,
+            newPackageName: template.appName,
+          );
+        } else if (path.isFile()) {
+          _changeAllInFile(
+            path: path,
+            oldValue: template.templateName,
+            newValue: template.appName,
+          );
+        }
+      }
     } on io.FileSystemException catch (e) {
       io.stderr.writeln(e.toString());
     } finally {
@@ -46,7 +64,7 @@ class CommandRunner {
         '--org',
         template.organization,
         '--project-name',
-        template.name,
+        template.appName,
         '.',
       ],
       workingDirectory: workDir,
@@ -83,5 +101,57 @@ class CommandRunner {
       'cp',
       ['-r', source.formatToFilePath(), target.formatToFilePath()],
     );
+  }
+
+  /// Update recursively all imports in [directoryPath] from [oldPackageName] to
+  /// [newPackageName].
+  Future<void> _changeAllInDirectory({
+    required String directoryPath,
+    required String oldPackageName,
+    required String newPackageName,
+  }) async {
+    final directory = io.Directory(directoryPath);
+    final dirName = directory.path.split('/').last;
+    if (directory.existsSync()) {
+      final files = directory.listSync();
+
+      final futures = <Future>[];
+      for (final file in files) {
+        if (file is io.File) {
+          futures.add(
+            _changeAllInFile(
+              path: file.path,
+              oldValue: oldPackageName,
+              newValue: newPackageName,
+            ),
+          );
+        }
+      }
+      await Future.wait(futures);
+      Logger.logInfo(
+        "All files in $dirName updated with new package name ($newPackageName)",
+      );
+    } else {
+      Logger.logWarning(
+        "Missing directory $dirName in your template, it will be ignored",
+      );
+    }
+  }
+
+  Future<void> _changeAllInFile({
+    required String path,
+    required String oldValue,
+    required String newValue,
+  }) async {
+    try {
+      final file = io.File(path);
+      final content = await file.readAsString();
+      if (content.contains(oldValue)) {
+        final newContent = content.replaceAll(oldValue, newValue);
+        await file.writeAsString(newContent);
+      }
+    } catch (e) {
+      Logger.logError("Error updating file $path : $e");
+    }
   }
 }
