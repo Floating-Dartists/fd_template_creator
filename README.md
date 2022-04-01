@@ -1,6 +1,6 @@
 # fd_template_creator
 
-A Dart script to generate a template for a Flutter project.
+A Dart script to generate a template for a Flutter project from a boilerplate code repository.
 
 This package will generate a template by using the `flutter create` command, then copying files from a code repo to replace the generated files.
 

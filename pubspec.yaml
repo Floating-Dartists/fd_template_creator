@@ -1,5 +1,5 @@
 name: fd_template_creator
-description: A sample command-line application.
+description:  A Dart script to generate a template for a Flutter project from a boilerplate code repository.
 version: 0.1.0
 homepage: https://github.com/Floating-Dartists/fd_template_creator
 environment:
