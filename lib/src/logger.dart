@@ -1,3 +1,4 @@
+/// Utility class for logging.
 abstract class Logger {
   /// Simple info log
   static void logInfo(String message, {bool lineBreak = false}) {
@@ -16,10 +17,5 @@ abstract class Logger {
   /// Simple error log
   static void logError(String message) {
     print("[ERROR] $message");
-  }
-
-  /// Log configuration key/value pair
-  static void logConfigKeyValue(String key, String? value) {
-    print("[CONFIG] $key = $value");
   }
 }
