@@ -1,5 +1,8 @@
 # fd_template_creator
 
+[![Pub Version](https://img.shields.io/pub/v/fd_template_creator)](https://pub.dev/packages/fd_template_creator)
+[![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
+
 A Dart script to generate a template for a Flutter project from a boilerplate code repository.
 
 This package will generate a template by using the `flutter create` command, then copying files from a code repo to replace the generated files.
@@ -57,4 +60,4 @@ dart pub global run fd_template_creator
 ## Credits
 
 * Inspired by the package [app_starter](https://pub.dev/packages/app_starter)
-* Developed by [TesteurManiak](https://github.com/TesteurManiak)
+* Developed by [TesteurManiak](https://github.com/TesteurManiak) & [the Floating Dartists](https://github.com/Floating-Dartists)
