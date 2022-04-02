@@ -20,7 +20,7 @@ dart pub global activate fd_template_creator
 ```yaml
 # Project name
 name: my_app
-# Project description
+# Project description (optional)
 # description: My app description
 template:
   # Template name (used to replace package import)
@@ -28,10 +28,12 @@ template:
   # Git repository to clone
   git:
     url: https://github.com/Floating-Dartists/fd_template.git
-    # If you want to depend on a specific commit, branch or tag, you can a ref key (Not yet supported)
+    # If you want to depend on a specific commit, branch or tag, you
+    # can use a ref key (Not yet supported)
     # ref: main
-  # Local path to the template  (Not yet supported)
+  # Local path to the template (Not yet supported)
   # path: path/to/fd_template
+  # List of the files or folders to copy from the template
   files:
     - .github/
     - lib/

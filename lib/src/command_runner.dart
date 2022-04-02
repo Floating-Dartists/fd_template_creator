@@ -7,6 +7,7 @@ import 'package:fd_template_creator/src/template_model.dart';
 import 'package:yaml/yaml.dart';
 
 class CommandRunner {
+  /// Run the script to create the template.
   Future<void> create() async {
     final current = io.Directory.current;
     final workingDirectoryPath = current.path;
@@ -57,6 +58,8 @@ class CommandRunner {
     Logger.logInfo('You are good to go ! :)', lineBreak: true);
   }
 
+  /// Run the flutter create command in the [workDir] with the parameters
+  /// mentioned in the [template].
   void _createFlutterProject(TemplateModel template, String workDir) {
     Logger.logInfo(
       'Creating flutter project using your current flutter version...',
@@ -76,18 +79,27 @@ class CommandRunner {
     );
   }
 
+  /// Retrieve the template from the [template] and copy it in the [workDir].
+  ///
+  /// If the template is a git repository, it will be cloned.
   void _retrieveTemplate(TemplateModel template, String workDir) {
     final templatePath = template.relativePath ?? template.gitRepository?.url;
     Logger.logInfo('Retrieving your template from $templatePath...');
 
-    io.Process.runSync(
-      'git',
-      ['clone', templatePath!, 'temp'],
-      workingDirectory: workDir,
-      runInShell: true,
-    );
+    final gitUrl = template.gitRepository?.url;
+    if (gitUrl != null) {
+      io.Process.runSync(
+        'git',
+        ['clone', templatePath!, 'temp'],
+        workingDirectory: workDir,
+        runInShell: true,
+      );
+    } else {
+      throw UnsupportedError('Only git repositories are supported for now.');
+    }
   }
 
+  /// Delete the temp files.
   void _deleteTempFiles(String workDir) {
     Logger.logInfo('Deleting temp files used for generation...');
     CommandWrapper.deleteSync('$workDir/temp');
