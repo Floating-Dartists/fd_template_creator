@@ -1,6 +1,7 @@
 # fd_template_creator
 
 [![Pub Version](https://img.shields.io/pub/v/fd_template_creator)](https://pub.dev/packages/fd_template_creator)
+[![Test workflow](https://github.com/Floating-Dartists/fd_template_creator/actions/workflows/dart.yml/badge.svg)](https://github.com/Floating-Dartists/fd_template_creator/actions/workflows/dart.yml)
 [![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
 
 A Dart script to generate a template for a Flutter project from a boilerplate code repository.
