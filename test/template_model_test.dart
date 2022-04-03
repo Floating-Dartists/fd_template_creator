@@ -21,7 +21,7 @@ void main() {
           template.gitRepository?.url,
           'https://github.com/Floating-Dartists/fd_template.git',
         );
-        expect(template.gitRepository?.ref, isNull);
+        expect(template.gitRepository?.ref, 'main');
       });
     });
   });

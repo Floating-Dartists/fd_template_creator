@@ -55,7 +55,6 @@ dart pub global run fd_template_creator
 
 ## TODO
 
-* Support git references
 * Support local paths
 * Better error management
 * Add some tests
