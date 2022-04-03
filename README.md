@@ -30,7 +30,7 @@ template:
   git:
     url: https://github.com/Floating-Dartists/fd_template.git
     # If you want to depend on a specific commit, branch or tag, you
-    # can use a ref key (Not yet supported)
+    # can use a ref key.
     # ref: main
   # Local path to the template (Not yet supported)
   # path: path/to/fd_template

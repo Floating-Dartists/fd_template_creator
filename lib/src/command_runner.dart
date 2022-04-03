@@ -88,9 +88,18 @@ class CommandRunner {
 
     final gitUrl = template.gitRepository?.url;
     if (gitUrl != null) {
+      final gitRef = template.gitRepository?.ref;
       io.Process.runSync(
         'git',
-        ['clone', templatePath!, 'temp'],
+        [
+          'clone',
+          if (gitRef != null) ...[
+            '--branch',
+            gitRef,
+          ],
+          templatePath!,
+          'temp',
+        ],
         workingDirectory: workDir,
         runInShell: true,
       );
