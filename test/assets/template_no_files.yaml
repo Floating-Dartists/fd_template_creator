@@ -1,0 +1,6 @@
+name: my_app
+template:
+  name: fd_template
+  git:
+    url: https://github.com/Floating-Dartists/fd_template.git
+    ref: main

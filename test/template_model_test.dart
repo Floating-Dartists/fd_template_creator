@@ -1,3 +1,4 @@
+import 'package:fd_template_creator/src/errors/exceptions.dart';
 import 'package:fd_template_creator/src/template_model.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
@@ -9,7 +10,7 @@ void main() {
   group('TemplateModel', () {
     group('fromYamlMap', () {
       test('parse: fd_template.yaml', () async {
-        final yaml = loadYaml(fixture('fd_template.yaml')) as YamlMap;
+        final yaml = loadYaml(fixture('template.yaml')) as YamlMap;
         final template = TemplateModel.fromYamlMap(yaml);
 
         expect(template.appName, 'my_app');
@@ -22,6 +23,22 @@ void main() {
           'https://github.com/Floating-Dartists/fd_template.git',
         );
         expect(template.gitRepository?.ref, 'main');
+      });
+
+      test('no project name', () {
+        final yaml = loadYaml(fixture('template_no_name.yaml')) as YamlMap;
+        expect(
+          () => TemplateModel.fromYamlMap(yaml),
+          throwsA(isA<MissingTemplateKeyException>()),
+        );
+      });
+
+      test('no template files', () {
+        final yaml = loadYaml(fixture('template_no_files.yaml')) as YamlMap;
+        expect(
+          () => TemplateModel.fromYamlMap(yaml),
+          throwsA(isA<MissingTemplateKeyException>()),
+        );
       });
     });
   });

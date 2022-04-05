@@ -1,6 +1,7 @@
 import 'dart:io' as io;
 
 import 'package:fd_template_creator/src/command_wrapper.dart';
+import 'package:fd_template_creator/src/errors/exceptions.dart';
 import 'package:fd_template_creator/src/extensions.dart';
 import 'package:fd_template_creator/src/logger.dart';
 import 'package:fd_template_creator/src/template_model.dart';
@@ -51,6 +52,8 @@ class CommandRunner {
       }
     } on io.FileSystemException catch (e) {
       io.stderr.writeln(e.toString());
+    } on MissingTemplateKeyException catch (e) {
+      io.stderr.writeln(e.toString());
     } finally {
       _deleteTempFiles(workingDirectoryPath);
     }
@@ -68,6 +71,8 @@ class CommandRunner {
       'flutter',
       [
         'create',
+        '--description',
+        template.description,
         '--org',
         template.organization,
         '--project-name',

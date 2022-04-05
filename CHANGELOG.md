@@ -1,3 +1,10 @@
+## 0.1.2
+
+- Fixed description parameter
+- Updated README to show `organization` parameter
+- Updated CI script
+- Added unit tests
+
 ## 0.1.1
 
 - Support git ref

@@ -23,6 +23,8 @@ dart pub global activate fd_template_creator
 name: my_app
 # Project description (optional)
 # description: My app description
+# Project organization (optional)
+# organization: com.example
 template:
   # Template name (used to replace package import)
   name: fd_template
@@ -55,9 +57,9 @@ dart pub global run fd_template_creator
 
 ## TODO
 
+* Custom path argument for the configuration file
 * Support local paths
 * Better error management
-* Add some tests
 
 ## Credits
 

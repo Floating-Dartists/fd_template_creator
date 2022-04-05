@@ -1,0 +1,13 @@
+template:
+  name: fd_template
+  git:
+    url: https://github.com/Floating-Dartists/fd_template.git
+    ref: main
+  files:
+    - .github/
+    - lib/
+    - assets/
+    - test/
+    - analysis_options.yaml
+    - dart_test.yaml
+    - pubspec.yaml

@@ -1,3 +1,4 @@
+import 'package:fd_template_creator/src/errors/exceptions.dart';
 import 'package:yaml/yaml.dart';
 
 const kDefaultDesc = 'A new Flutter project.';
@@ -68,6 +69,17 @@ class TemplateModel {
   /// parsed `fd_template.yaml` file.
   factory TemplateModel.fromYamlMap(YamlMap yamlMap) {
     final templateMap = yamlMap['template'] as YamlMap;
+
+    if (!yamlMap.containsKey('name')) {
+      throw MissingTemplateKeyException('name');
+    }
+    if (!templateMap.containsKey('name')) {
+      throw MissingTemplateKeyException('template name');
+    }
+    if (!templateMap.containsKey('files')) {
+      throw MissingTemplateKeyException('template files');
+    }
+
     return TemplateModel(
       appName: yamlMap['name'] as String,
       description: yamlMap['description'] as String?,
