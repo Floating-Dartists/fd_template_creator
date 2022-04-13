@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://i.imgur.com/Gd0Mh6y.png" height="300">
+</p>
+
 # fd_template_creator
 
 [![Pub Version](https://img.shields.io/pub/v/fd_template_creator)](https://pub.dev/packages/fd_template_creator)
