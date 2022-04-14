@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.imgur.com/Gd0Mh6y.png" height="300">
+  <img src="https://i.imgur.com/Gd0Mh6y.png" width="800">
 </p>
 
 # fd_template_creator
@@ -68,4 +68,3 @@ dart pub global run fd_template_creator
 ## Credits
 
 * Inspired by the package [app_starter](https://pub.dev/packages/app_starter)
-* Developed by [TesteurManiak](https://github.com/TesteurManiak) & [the Floating Dartists](https://github.com/Floating-Dartists)
