@@ -1,12 +1,15 @@
-<p align="center">
-  <img src="https://i.imgur.com/Gd0Mh6y.png" width="800">
-</p>
+# Template Creator
 
-# fd_template_creator
+<p align="center">
+  <a href="https://github.com/Floating-Dartists" target="_blank">
+    <img src="https://raw.githubusercontent.com/Floating-Dartists/fd_template/main/assets/Transparent-light.png" alt="Floating Dartists" width="600">
+  </a>
+</p>
 
 [![Pub Version](https://img.shields.io/pub/v/fd_template_creator)](https://pub.dev/packages/fd_template_creator)
 [![Test workflow](https://github.com/Floating-Dartists/fd_template_creator/actions/workflows/dart.yml/badge.svg)](https://github.com/Floating-Dartists/fd_template_creator/actions/workflows/dart.yml)
 [![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
+[![GitHub license](https://img.shields.io/github/license/Floating-Dartists/fd_template_creator)](https://github.com/Floating-Dartists/fd_template_creator/blob/main/LICENSE)
 
 A Dart script to generate a template for a Flutter project from a boilerplate code repository.
 
