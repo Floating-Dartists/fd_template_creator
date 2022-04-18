@@ -1,3 +1,7 @@
+## 0.1.2+1
+
+- Updated README with new logo
+
 ## 0.1.2
 
 - Fixed description parameter
