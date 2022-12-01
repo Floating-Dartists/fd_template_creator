@@ -41,7 +41,7 @@ template:
     # If you want to depend on a specific commit, branch or tag, you
     # can use a ref key.
     # ref: main
-  # Local path to the template (Not yet supported)
+  # Local path to the template
   # path: path/to/fd_template
   # List of the files or folders to copy from the template
   files:
@@ -65,7 +65,6 @@ dart pub global run fd_template_creator
 ## TODO
 
 * Custom path argument for the configuration file
-* Support local paths
 * Better error management
 
 ## Credits

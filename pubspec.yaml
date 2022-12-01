@@ -1,6 +1,6 @@
 name: fd_template_creator
 description:  A Dart script to generate a template for a Flutter project from a boilerplate code repository.
-version: 0.1.2+1
+version: 0.1.3+2
 homepage: https://github.com/Floating-Dartists/fd_template_creator
 environment:
   sdk: '>=2.16.1 <3.0.0'

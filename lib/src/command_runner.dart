@@ -109,7 +109,22 @@ class CommandRunner {
         runInShell: true,
       );
     } else {
-      throw UnsupportedError('Only git repositories are supported for now.');
+      final result = io.Process.runSync(
+        'cp',
+        ['-r', templatePath!, 'temp'],
+        workingDirectory: workDir,
+        runInShell: true,
+      );
+      // Windows doesn't have the cp command, so we launch Powershell for our
+      // command in this case.
+      if (result.exitCode != 0) {
+        io.Process.runSync(
+          'powershell',
+          ['cp', '-r', templatePath, 'temp'],
+          workingDirectory: workDir,
+          runInShell: true,
+        );
+      }
     }
   }
 
