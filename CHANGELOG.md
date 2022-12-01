@@ -1,3 +1,7 @@
+# 0.1.3
+
+- Added support for local paths in the yaml template
+
 ## 0.1.2+1
 
 - Updated README with new logo
