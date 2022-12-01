@@ -58,7 +58,7 @@ class CommandRunner {
       _deleteTempFiles(workingDirectoryPath);
     }
 
-    Logger.logInfo('You are good to go ! :)', lineBreak: true);
+    Logger.logInfo('You are good to go! :)', lineBreak: true);
   }
 
   /// Run the flutter create command in the [workDir] with the parameters
@@ -102,7 +102,7 @@ class CommandRunner {
             '--branch',
             gitRef,
           ],
-          templatePath!,
+          if (templatePath != null) templatePath,
           'temp',
         ],
         workingDirectory: workDir,
@@ -112,14 +112,23 @@ class CommandRunner {
       if (io.Platform.isWindows) {
         io.Process.runSync(
           'powershell',
-          ['cp', '-r', templatePath!, 'temp'],
+          [
+            'cp',
+            '-r',
+            if (templatePath != null) templatePath,
+            'temp',
+          ],
           workingDirectory: workDir,
           runInShell: true,
         );
       } else {
         io.Process.runSync(
           'cp',
-          ['-r', templatePath!, 'temp'],
+          [
+            '-r',
+            if (templatePath != null) templatePath,
+            'temp',
+          ],
           workingDirectory: workDir,
           runInShell: true,
         );
