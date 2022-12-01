@@ -1,6 +1,7 @@
 # 0.1.3
 
 - Added support for local paths in the yaml template
+- Bumped dependencies version
 
 ## 0.1.2+1
 
