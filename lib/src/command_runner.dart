@@ -109,7 +109,21 @@ class CommandRunner {
         runInShell: true,
       );
     } else {
-      throw UnsupportedError('Only git repositories are supported for now.');
+      if (io.Platform.isWindows) {
+        io.Process.runSync(
+          'powershell',
+          ['cp', '-r', templatePath!, 'temp'],
+          workingDirectory: workDir,
+          runInShell: true,
+        );
+      } else {
+        io.Process.runSync(
+          'cp',
+          ['-r', templatePath!, 'temp'],
+          workingDirectory: workDir,
+          runInShell: true,
+        );
+      }
     }
   }
 

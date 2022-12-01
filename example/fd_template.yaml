@@ -3,7 +3,7 @@ name: my_app
 # organization: com.example
 template:
   name: fd_template
-  # path: path/to/template
+  # path: ../fd_template_example
   git:
     url: https://github.com/Floating-Dartists/fd_template.git
     # ref: main
