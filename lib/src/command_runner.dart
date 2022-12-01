@@ -109,18 +109,17 @@ class CommandRunner {
         runInShell: true,
       );
     } else {
-      final result = io.Process.runSync(
-        'cp',
-        ['-r', templatePath!, 'temp'],
-        workingDirectory: workDir,
-        runInShell: true,
-      );
-      // Windows doesn't have the cp command, so we launch Powershell for our
-      // command in this case.
-      if (result.exitCode != 0) {
+      if (io.Platform.isWindows) {
         io.Process.runSync(
           'powershell',
-          ['cp', '-r', templatePath, 'temp'],
+          ['cp', '-r', templatePath!, 'temp'],
+          workingDirectory: workDir,
+          runInShell: true,
+        );
+      } else {
+        io.Process.runSync(
+          'cp',
+          ['-r', templatePath!, 'temp'],
           workingDirectory: workDir,
           runInShell: true,
         );
